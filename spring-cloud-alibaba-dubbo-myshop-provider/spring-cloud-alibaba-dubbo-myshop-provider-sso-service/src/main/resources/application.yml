@@ -1,0 +1,52 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: myshop-provider-sso
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.10.146:3307/myshop?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+    hikari:
+      # 最小空闲连接数量
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 600000
+      # 连接池最大连接数，默认是 10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为，默认值为 true
+      auto-commit: true
+      # 连接池母子
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值 0 表示无限生命周期，默认 1800000 即 30 分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认 30 秒，即 30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.10.146:8848
+
+server:
+  port: 9502
+
+dubbo:
+  application:
+    name: myshop-provider-sso
+  registry:
+    address: nacos://192.168.10.146:8848
+  scan:
+    basePackages: com.funtl.myshop.provider.sso.service
+
+mybatis:
+  type-aliases-package: com.funtl.myshop.commons.domain
+  mapper-locations: classpath:mapper/*.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
